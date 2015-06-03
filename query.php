@@ -40,6 +40,7 @@ if( $stmt = $mysqli -> prepare(" SELECT * FROM datatable WHERE name = ? GROUP BY
 		$i = 0;
 
 	 	while ($stmt->fetch()){
+
 	 		$i++;
 
 			echo $prefix . " {\n";
@@ -50,15 +51,13 @@ if( $stmt = $mysqli -> prepare(" SELECT * FROM datatable WHERE name = ? GROUP BY
 			echo " }";
 			$prefix = ",\n";
 
-
-			// if < x fallback to default
 		}
 		echo ',	{ "company" : "'. $name.'" }';
 		echo "\n]";	
-		//echo '[{ "company" : "'. $name.'" }]';
-	}else{
+
+	}else
 		echo '[{ "status" : "n/a data" }]';
-	}
+	
 
 	$stmt -> close();
 }else

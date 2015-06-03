@@ -231,7 +231,7 @@ function updateCompany(company){
 		<!--<p class=".col-md-4">Closing Price: <span class="cPrice"></span></p>-->
 	</div>
 	
-	<div class="warning" style="display:none;">Valid queries range from 1 to 6 characters, inclusive.</div>	
+	<div class="warning" style="display:none;">Valid queries range from 3 to 8 characters, inclusive.</div>	
 	<div class="warning" style="display:none;">Your search has not been found.</div>
 	
 
