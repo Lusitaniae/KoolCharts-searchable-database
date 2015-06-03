@@ -1,3 +1,8 @@
+<?php 
+header("X-XSS-Protection: 1; mode=block");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-Content-Type-Options: nosniff");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,9 +29,12 @@
 <?php
 if(isset($_GET['t']))
 	if( strlen($_GET['t']) > 0 && strlen($_GET['t']) < 7){
-		$tickr = "query.php?t=" .  trim($_GET['t']);
-		$tickr0 = "query2.php?t=" .  trim($_GET['t']);
-		$tickr1 = trim($_GET['t']);}
+		$query = htmlspecialchars($_GET['t']);
+		$tickr = "query.php?t=" .  htmlspecialchars($_GET['t']);
+	}
+
+		//$tickr0 = "query2.php?t=" .  trim($_GET['t']);
+		//$tickr1 = trim($_GET['t']);}
 ?>
     
 <script type="text/javascript">
@@ -132,57 +140,43 @@ if(isset($tickr))
 		
 else{ ?>
 
-	[ { "Day": "3", "Um": -1.8, "Dois": 0.31, "Tres": 1.81 }, { "Day": "4", "Um": -2.31, "Dois": 0.27, "Tres": 2.57 }, { "Day": "5", "Um": -2.98, "Dois": 0.5, "Tres": 2.91 }, { "Day": "6", "Um": -2.73, "Dois": 0.52, "Tres": 3.27 }, { "Day": "7", "Um": -2.67, "Dois": 0.42, "Tres": 2.73 }, { "Day": "8", "Um": -2.81, "Dois": 0.5, "Tres": 3.33 }, { "Day": "9", "Um": -3.59, "Dois": 0.24, "Tres": 3.51 }, { "Day": "10", "Um": -3.5, "Dois": -0.15, "Tres": 3.68 }, { "Day": "11", "Um": -4.26, "Dois": -0.4, "Tres": 3.72 }, { "Day": "12", "Um": -4.48, "Dois": -0.49, "Tres": 3.68 }, { "Day": "13", "Um": -5.07, "Dois": -1.07, "Tres": 4.38 }, { "Day": "14", "Um": -4.91, "Dois": -0.9, "Tres": 3.82 }, { "Day": "15", "Um": -5.07, "Dois": -0.87, "Tres": 4.5 } ];
+	[ { "Day": "3", "Um": -1.8, "Dois": 0.31, "Tres": 1.81 }, { "Day": "4", "Um": -2.31, "Dois": 0.27, "Tres": 2.57 }, { "Day": "5", "Um": -2.98, "Dois": 0.5, "Tres": 2.91 }, { "Day": "6", "Um": -2.73, "Dois": 0.52, "Tres": 3.27 }, { "Day": "7", "Um": -2.67, "Dois": 0.42, "Tres": 2.73 }, { "Day": "8", "Um": -2.81, "Dois": 0.5, "Tres": 3.33 }, { "Day": "9", "Um": -3.59, "Dois": 0.24, "Tres": 3.51 }, { "Day": "10", "Um": -3.5, "Dois": -0.15, "Tres": 3.68 }, { "Day": "11", "Um": -4.26, "Dois": -0.4, "Tres": 3.72 }, { "Day": "12", "Um": -4.48, "Dois": -0.49, "Tres": 3.68 }, { "Day": "13", "Um": -5.07, "Dois": -1.07, "Tres": 4.38 }, { "Day": "14", "Um": -4.91, "Dois": -0.9, "Tres": 3.82 }, { "Day": "15", "Um": -5.07, "Dois": -0.87, "Tres": 4.5 }, { "company" : "default" } ];
+	
 
 <?php } ?>	
 				
 function queryWarnings(id)
 {
-	if(id == 0){
+	if(id == 0)
 		document.getElementsByClassName('warning')[0].style['display'] = 'block';
-		//setTimeout(function(){document.getElementsByClassName('warning')[0].style['display'] = 'none'},3000);
-		}
-	if(id == 1){
+		
+	if(id == 1)
 		document.getElementsByClassName('warning')[1].style['display'] = 'block';
-		//setTimeout(function(){document.getElementsByClassName('warning')[1].style['display'] = 'none'},3000);
-		}
-	if(id == 2){
-		document.getElementsByClassName('warning')[2].style['display'] = 'block';
-		//setTimeout(function(){document.getElementsByClassName('warning')[2].style['display'] = 'none'},3000);
-		}
+
 }
+
 function clearWarnings(){
 		document.getElementsByClassName('warning')[0].style['display'] = 'none';
-		document.getElementsByClassName('warning')[1].style['display'] = 'none';
-		document.getElementsByClassName('warning')[2].style['display'] = 'none'	;
+		document.getElementsByClassName('warning')[1].style['display'] = 'none'	;
 }
 		
 function changeData(ticker)
 {	
 
-	if(ticker.length > 0 && ticker.length < 7){
+	if(ticker.length > 0 && ticker.length < 7)
 		var dataURI = loadJSON('query.php?t=' + ticker);
-	}else
+	else
 		queryWarnings(0);
 		
-	if(dataURI[0].status == "ticker not found"){
+	if(dataURI[0].status == "n/a data"){
 		clearWarnings();
 		queryWarnings(1);
 		window.history.pushState(ticker, ticker, '?t=' + ticker);
 		chart1.setData(dataURI);
-	}else if(dataURI[0].status == "n/a data"){
-		clearWarnings();
-		queryWarnings(2);
-		window.history.pushState(ticker, ticker, '?t=' + ticker);
-		chart1.setData(dataURI);
 	}else{
-		//update company name
-	//document.getElementsByClassName('tick')[0].innerHTML =  ticker;
-		//update url
-	window.history.pushState(ticker, ticker, '?t=' + ticker);
-		//update graph data
-	clearWarnings();	
-	chart1.setData(dataURI);
+		window.history.pushState(ticker, ticker, '?t=' + ticker);
+		clearWarnings();	
+		chart1.setData(dataURI);
 	
 
 	}
@@ -207,18 +201,16 @@ function verifyGet(get){
 
 function removeSpaces(string) {
 	return string.split(' ').join('');
-}/*
+}
+
 function updateCompany(company){
-	if(company != "")
-		var dataUR = loadJSON('query.php?t=' + company);
+
+	if(company == "")
+		company = dataURL.slice(-1)[0].company;
 	
-		if(dataUR[0].status == "Company name not found")
-			document.getElementsByClassName('tick')[0].innerHTML = "Not found" ;
-		else if(dataUR[0].company == "")
-			document.getElementsByClassName('tick')[0].innerHTML = "n/a" ;
-		else	
-			document.getElementsByClassName('tick')[0].innerHTML = dataUR[0].company ;
-}	*/
+	if(company.length < 8)
+		document.getElementsByClassName('tick')[0].innerHTML = company ;
+}	
 
 //----------------------- The end of the configuration for creating a chart. -----------------------
 
@@ -231,14 +223,13 @@ function updateCompany(company){
 		<h3 class=".col-md-4">Company: <span class="tick"> </span></h3> 
 		<!--<p class=".col-md-4">Closing Price: <span class="cPrice"></span></p>-->
 	</div>
-	<!--
+	
 	<div class="warning" style="display:none;">Valid queries range from 1 to 6 characters, inclusive.</div>
-	<div class="warning" style="display:none;">Ticker not found.</div>
-	<div class="warning" style="display:none;">Data n/a.</div>
-	-->
+	<div class="warning" style="display:none;">Your search has not been found.</div>
+	
 
 	<form method="get" action="" class="form-inline">
-		<input type="search" class="form-control" placeholder="Enter ticker" id="formValueId" name="t" 
+		<input type="search" class="form-control" placeholder="Enter ticker" id="formValueId" name="t" pattern="[A-Za-z-0-9]"
 		onkeyup="this.value=removeSpaces(this.value);" minlength=3 maxlength=8 onkeypress="" required autofocus />
 
 		<input type="button" id="theButton" class="btn btn-default" value="consult" 

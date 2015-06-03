@@ -1,16 +1,17 @@
 <?php
-ini_set('display_errors', 1); //DEV ONLY
+ini_set('display_errors', 0); //DEV ONLY
 
 $minRows = 3;
+$limit = 0;
 
 
-// For extra security limit db user to read only access
+// For extra security limit dbuser to SELECT only permissions on the respective db
 $mysqli = mysqli_connect( 'localhost', 'root', '', 'database' );
 
 if(mysqli_connect_errno()) {
 	// send debug info to developer and hide from user
-	 mysqli_connect_errno(); 
-	//exit();
+	//mysqli_connect_errno(); 
+	exit();
 }
 
 //sanitize input
@@ -22,13 +23,13 @@ if (strlen($comp) < 3 || strlen($comp) > 6 )
 
 
 /* Create a prepared statement */
-$stmt = $mysqli -> prepare(" SELECT * FROM datatable WHERE name = ? GROUP BY id ASC LIMIT 12");
-print	$stmt->error;
- 	$stmt -> bind_param("s", $comp); print	$stmt->error;
+if( $stmt = $mysqli -> prepare(" SELECT * FROM datatable WHERE name = ? GROUP BY id ASC LIMIT 12")){
 
- 	$stmt -> execute();print	$stmt->error;
+ 	$stmt -> bind_param("s", $comp);
 
-  	$stmt -> bind_result($id, $name, $s1, $s2, $s3);print	$stmt->error;
+ 	$stmt -> execute();
+
+  	$stmt -> bind_result($id, $name, $s1, $s2, $s3);
 
   	$stmt->store_result();
 
@@ -50,15 +51,19 @@ print	$stmt->error;
 			$prefix = ",\n";
 
 
-			// if < x fallback todefault
-		}print	$stmt->error;
+			// if < x fallback to default
+		}
+		echo ',	{ "company" : "'. $name.'" }';
 		echo "\n]";	
 		//echo '[{ "company" : "'. $name.'" }]';
 	}else{
-		//echo '[{ "status" : "n/a data" }]';
+		echo '[{ "status" : "n/a data" }]';
 	}
 
 	$stmt -> close();
+}else
+	echo '[{ "status" : "n/a data" }]';
+
 
 
 
