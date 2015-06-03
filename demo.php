@@ -243,12 +243,11 @@ function updateCompany(company){
 		 onkeypress="return noenter(event);changeData(this.form.t.value);" />
 	</form>
 
-	<div class="content">
+	<div class="conten">
 		<div id="chartHolder" style="width:90%; height:400px;"></div>
 	</div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </body>
 </html> 
     
