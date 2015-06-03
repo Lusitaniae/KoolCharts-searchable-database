@@ -133,14 +133,19 @@ if (window.XMLHttpRequest) {
 
 //Sample dataset.
 
-var dataURL = 
-<?php 
-if(isset($tickr)) 
-	echo "loadJSON('" . $tickr . "');" ; 
-		
-else{ ?>
+<?php  if(isset($tickr)) {
+	echo "var tmp = loadJSON('" . $tickr . "');" ; 
+?>
 
-	[ { "Day": "3", "Um": -1.8, "Dois": 0.31, "Tres": 1.81 }, { "Day": "4", "Um": -2.31, "Dois": 0.27, "Tres": 2.57 }, { "Day": "5", "Um": -2.98, "Dois": 0.5, "Tres": 2.91 }, { "Day": "6", "Um": -2.73, "Dois": 0.52, "Tres": 3.27 }, { "Day": "7", "Um": -2.67, "Dois": 0.42, "Tres": 2.73 }, { "Day": "8", "Um": -2.81, "Dois": 0.5, "Tres": 3.33 }, { "Day": "9", "Um": -3.59, "Dois": 0.24, "Tres": 3.51 }, { "Day": "10", "Um": -3.5, "Dois": -0.15, "Tres": 3.68 }, { "Day": "11", "Um": -4.26, "Dois": -0.4, "Tres": 3.72 }, { "Day": "12", "Um": -4.48, "Dois": -0.49, "Tres": 3.68 }, { "Day": "13", "Um": -5.07, "Dois": -1.07, "Tres": 4.38 }, { "Day": "14", "Um": -4.91, "Dois": -0.9, "Tres": 3.82 }, { "Day": "15", "Um": -5.07, "Dois": -0.87, "Tres": 4.5 }, { "company" : "default" } ];
+	extraInfo = tmp.pop();
+	dataURL = tmp;
+
+<?php }else{ ?>
+
+	var tmp = [ { "Day": "3", "Um": -1.8, "Dois": 0.31, "Tres": 1.81 }, { "Day": "4", "Um": -2.31, "Dois": 0.27, "Tres": 2.57 }, { "Day": "5", "Um": -2.98, "Dois": 0.5, "Tres": 2.91 }, { "Day": "6", "Um": -2.73, "Dois": 0.52, "Tres": 3.27 }, { "Day": "7", "Um": -2.67, "Dois": 0.42, "Tres": 2.73 }, { "Day": "8", "Um": -2.81, "Dois": 0.5, "Tres": 3.33 }, { "Day": "9", "Um": -3.59, "Dois": 0.24, "Tres": 3.51 }, { "Day": "10", "Um": -3.5, "Dois": -0.15, "Tres": 3.68 }, { "Day": "11", "Um": -4.26, "Dois": -0.4, "Tres": 3.72 }, { "Day": "12", "Um": -4.48, "Dois": -0.49, "Tres": 3.68 }, { "Day": "13", "Um": -5.07, "Dois": -1.07, "Tres": 4.38 }, { "Day": "14", "Um": -4.91, "Dois": -0.9, "Tres": 3.82 }, { "Day": "15", "Um": -5.07, "Dois": -0.87, "Tres": 4.5 }, { "company" : "default" } ];
+
+	extraInfo = tmp.pop();
+	dataURL = tmp;
 	
 
 <?php } ?>	
@@ -163,22 +168,26 @@ function clearWarnings(){
 function changeData(ticker)
 {	
 
-	if(ticker.length > 0 && ticker.length < 7)
-		var dataURI = loadJSON('query.php?t=' + ticker);
-	else
+	if(ticker.length > 0 && ticker.length < 7){
+		var tmp = loadJSON('query.php?t=' + ticker);
+		var extraInfo = tmp.pop();
+		var dataURI = tmp;
+	}else
 		queryWarnings(0);
 		
-	if(dataURI[0].status == "n/a data"){
+	if(extraInfo.status == "n/a data"){
+
 		clearWarnings();
 		queryWarnings(1);
 		window.history.pushState(ticker, ticker, '?t=' + ticker);
 		chart1.setData(dataURI);
+
 	}else{
+
 		window.history.pushState(ticker, ticker, '?t=' + ticker);
 		clearWarnings();	
 		chart1.setData(dataURI);
 	
-
 	}
 }
 function noenter(e) {
@@ -193,9 +202,7 @@ function verifyGet(get){
 	//verify GET param
 	if(get.length < 0 || get.length > 7)
 		queryWarnings(0);
-	else if(dataURL[0].status == "ticker not found")
-		queryWarnings(1);
-	else if(dataURL[0].status == "n/a data")
+	else if(extraInfo.status == "n/a data")
 		queryWarnings(2);
 }	
 
@@ -206,7 +213,7 @@ function removeSpaces(string) {
 function updateCompany(company){
 
 	if(company == "")
-		company = dataURL.slice(-1)[0].company;
+		company = extraInfo.company;
 	
 	if(company.length < 8)
 		document.getElementsByClassName('tick')[0].innerHTML = company ;
@@ -224,7 +231,7 @@ function updateCompany(company){
 		<!--<p class=".col-md-4">Closing Price: <span class="cPrice"></span></p>-->
 	</div>
 	
-	<div class="warning" style="display:none;">Valid queries range from 1 to 6 characters, inclusive.</div>
+	<div class="warning" style="display:none;">Valid queries range from 1 to 6 characters, inclusive.</div>	
 	<div class="warning" style="display:none;">Your search has not been found.</div>
 	
 

@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 0); //DEV ONLY
+ini_set('display_errors', 0); 
 
 $minRows = 3;
 $limit = 0;
