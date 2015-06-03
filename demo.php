@@ -223,12 +223,11 @@ function updateCompany(company){
 
 </script>
 </head>
-<body onload="verifyGet('<?php if(isset($tickr1)) echo $tickr1; ?>');updateCompany('<?php if(isset($tickr1)) echo $tickr1; ?>');">
+<body>
 
 <div class="container-fluid"> 	
- 	<div class="row ticker">
-		<h3 class=".col-md-4">Company: <span class="tick"> </span></h3> 
-		<!--<p class=".col-md-4">Closing Price: <span class="cPrice"></span></p>-->
+ 	<div class="ticker">
+		<h3>Company: <span class="tick"> </span></h3> 
 	</div>
 	
 	<div class="warning" style="display:none;">Valid queries range from 3 to 8 characters, inclusive.</div>	
@@ -244,8 +243,8 @@ function updateCompany(company){
 		 onkeypress="return noenter(event);changeData(this.form.t.value);" />
 	</form>
 
-	<div class="content row">
-		<div id="chartHolder" class=".col-md-12" style="width:90%; height:400px;"></div>
+	<div class="content">
+		<div id="chartHolder" style="width:90%; height:400px;"></div>
 	</div>
 </div>
 
