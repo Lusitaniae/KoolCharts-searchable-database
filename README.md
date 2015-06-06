@@ -7,8 +7,19 @@ Koolcharts is a paid plugin, purchase your license and replace kc/KoolChartLicen
 **Features:**
 
 * It's sharable. The url is clean and short and it can be used to share the same data.
-* It's lightweight and modern. Based on HTML5, Bootstrap, KoolChart libraries and vanilla javascrip.t
-* It's secure. Uses prepared statements to access database and other security measures limiting input.
+* It's modern. Based on HTML5, Bootstrap, KoolChart libraries and javascript.
+* It's secure. Uses prepared statements to access database and other security measures for input.
 
 ![My image](http://i.imgur.com/p6A23Y6.png)
 ![My image](http://i.imgur.com/zMsxJwP.png)
+
+
+Table structure is:
+
+id | name | s1 | s2 | s3
+---|------|----|----|---
+0 | demo | 12 | 18 | 26
+1 | demo | 10 | 20 | 30
+2 | demo | 20 | 40 | 60
+3 | demo | 12 | 29 | 26
+4 | demo | 5 | 36 | 74
